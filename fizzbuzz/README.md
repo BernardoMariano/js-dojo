@@ -1,5 +1,14 @@
 # [FizzBuzz](https://en.wikipedia.org/wiki/Fizz_buzz)
 
+## Meet
+**Date**: 03/08/2016
+
+**Participants**:
+- Bernardo
+- Brian
+- Lucas
+- Pamella
+
 ## Installing
     npm install
 
