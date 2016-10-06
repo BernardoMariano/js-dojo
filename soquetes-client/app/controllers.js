@@ -10,11 +10,9 @@ angular
 
         $scope.messages = []
 
-        const { messages } = $scope
-
         socket.on('message', res => {
             new Notification(res.body)
-            messages.push(res)
+            $scope.messages.push(res)
             $scope.$apply()
         })
 
@@ -33,6 +31,13 @@ angular
             socket.get('192.168.1.154:1337/soquete/listRoom', { name })
         }
 
+        $scope.sendIfEnter = ($event) => {
+            if ($event.which === 13) {
+                $event.preventDefault()
+                $scope.send()
+            }
+        }
+
         $scope.send = () => {
             const { name, body } = $scope
 
@@ -42,12 +47,21 @@ angular
             $scope.body = ''
         }
 
-        $scope.enterRoom = name => {
-            socket.post('192.168.1.154:1337/soquete/enterRoom', { name })
-            $scope.inChatRoom = true
-        }
-
         $scope.createRoom = () => {
             socket.post('192.168.1.154:1337/soquete/createRoom', { roomName: $scope.newRoom })
+            $scope.newRoom = ''
+        }
+
+        $scope.enterRoom = room => {
+            $scope.messages = []
+            socket.post('192.168.1.154:1337/soquete/enterRoom', { roomName: room.name })
+            $scope.inChatRoom = true
+            $scope.currentRoom = room
+        }
+
+        $scope.leaveRoom = () => {
+            socket.post('192.168.1.154:1337/soquete/leaveRoom', { roomName: $scope.currentRoom.name })
+            $scope.inChatRoom = false
+            $scope.currentRoom = null
         }
     })

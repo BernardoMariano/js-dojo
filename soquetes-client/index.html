@@ -8,12 +8,12 @@
     </head>
     <body ng-cloak>
         <div ng-controller="MainCtrl">
-            <div ng-hide="isLoggedIn">
+            <div class="login-wrapper" ng-hide="isLoggedIn">
                 Name:<br>
                 <input ng-model="name"><br>
                 <button ng-click="login()">Login!</button>
             </div>
-            <div ng-show="isLoggedIn && !inChatRoom">
+            <div class="rooms-wrapper" ng-show="isLoggedIn && !inChatRoom">
                 <form>
                     New room:<br>
                     <input ng-model="newRoom"><br>
@@ -21,14 +21,18 @@
                 </form>
                 <ul>
                     <li ng-repeat="room in rooms track by $index">
-                        <a href="#" ng-click="enterRoom(room.name);">{{ room.name }}</a>
+                        <a href="#" ng-click="enterRoom(room);">{{ room.name }}</a>
+                        ({{ room.users.length }} online)
                     </li>
                 </ul>
             </div>
-            <div ng-show="isLoggedIn && inChatRoom">
+            <div class="chat-wrapper" ng-show="isLoggedIn && inChatRoom">
+                <a href="#" ng-click="leaveRoom();">&#10094; Leave</a>
+                <strong>{{ currentRoom.roomName }}</strong>
+                <!-- <span>({{ currentRoom.users.length }} online)</span> -->
                 <form>
                     Message:<br>
-                    <textarea ng-model="body"></textarea><br>
+                    <textarea ng-model="body" ng-keypress="sendIfEnter($event);"></textarea><br>
                     <button ng-click="send()">Send!</button>
                 </form>
                 <ul>
